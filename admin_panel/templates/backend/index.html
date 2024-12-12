@@ -1,0 +1,84 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Dashboard</title>
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+    />
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}" />
+    <style>
+      body {
+        background-color: #f8f9fa;
+      }
+      .table img {
+        max-width: 100px;
+        height: auto;
+      }
+      .messages {
+        margin-top: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h2 class="mb-4">Admin Dashboard</h2>
+      <div class="row">
+        <div class="col-md-4">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">Verify User ID Images</h5>
+              <p class="card-text">Review and verify user ID images.</p>
+              <a
+                href="{% url 'backend:verify_user_id_images' %}"
+                class="btn btn-primary"
+                >Go to Verification</a
+              >
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">Verify Prescriptions</h5>
+              <p class="card-text">Review and verify user prescriptions.</p>
+              <a
+                href="{% url 'backend:verify_prescriptions' %}"
+                class="btn btn-primary"
+                >Go to Verification</a
+              >
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">View Orders</h5>
+              <p class="card-text">View and manage user orders.</p>
+              <a href="{% url 'backend:view_orders' %}" class="btn btn-primary"
+                >Go to Orders</a
+              >
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4 mt-4">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">User List</h5>
+              <p class="card-text">View and manage users.</p>
+              <a href="{% url 'backend:user_list' %}" class="btn btn-primary"
+                >Go to User List</a
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  </body>
+</html>

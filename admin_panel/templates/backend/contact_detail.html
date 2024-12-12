@@ -1,0 +1,126 @@
+{% extends 'backend/base.html' %}
+{% block title %}Contact Details{% endblock %}
+{% block body %}
+<div class="content-page">
+    <div class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12">
+                    <div class="page-title-box">
+                        <h4 class="page-title">Contact Details</h4>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>Name</th>
+                                            <th>Email</th>
+                                            <th>Phone</th>
+                                            <th>Message</th>
+                                            <th>Upload</th>
+                                            <th>Date</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for contact in contacts %}
+                                        <tr>
+                                            <td>{{ forloop.counter }}</td>
+                                            <td>{{ contact.full_name }}</td>
+                                            <td>{{ contact.email }}</td>
+                                            <td>{{ contact.phone }}</td>
+                                            <td>{{ contact.message }}</td>
+                                            <td>
+                                                {% if contact.image %}
+                                                    <img src="{{ contact.image.url }}" alt="Image" style="max-width: 100px; max-height: 100px;">
+                                                {% elif contact.video_url %}
+                                                    <!-- <a href="{{ contact.video_url }}" target="_blank">View Video</a> -->
+                                                    {% if contact.video_thumbnail %}
+                                                        <img src="{{ contact.video_thumbnail.url }}" alt="Thumbnail" style="max-width: 100px; max-height: 100px;">
+                                                    {% endif %}
+                                                {% endif %}
+                                            </td>
+                                            <td>{{ contact.created_at }}</td>
+                                            <td>
+                                                <div class="d-flex align-items-center">
+                                                    {% if contact.video_url %}
+                                                        <a href="{{ contact.video_url }}" target="_blank" class="view-video" data-toggle="tooltip" title="View Video">
+                                                            <i class="material-icons text-primary">&#xe041;</i> <!-- Video Icon -->
+                                                        </a>
+                                                    {% endif %}
+                                                    <a href="#deleteModal{{ contact.id }}" class="delete" data-toggle="modal">
+                                                        <i class="material-icons text-danger" data-toggle="tooltip" title="Delete">&#xE872;</i>
+                                                    </a>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                                
+                                
+                            </div>
+
+                            <!-- Pagination -->
+                            <nav>
+                                <ul class="pagination pagination-rounded mb-0">
+                                    {% if contacts.has_previous %}
+                                    <li class="page-item"><a href="?page=1" class="page-link">First</a></li>
+                                    <li class="page-item"><a href="?page={{ contacts.previous_page_number }}" class="page-link">Previous</a></li>
+                                    {% endif %}
+                                    {% for num in contacts.paginator.page_range %}
+                                    <li class="page-item {% if contacts.number == num %}active{% endif %}">
+                                        <a href="?page={{ num }}" class="page-link">{{ num }}</a>
+                                    </li>
+                                    {% endfor %}
+                                    {% if contacts.has_next %}
+                                    <li class="page-item"><a href="?page={{ contacts.next_page_number }}" class="page-link">Next</a></li>
+                                    <li class="page-item"><a href="?page={{ contacts.paginator.num_pages }}" class="page-link">Last</a></li>
+                                    {% endif %}
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Delete Modal -->
+{% for contact in contacts %}
+<div class="modal fade" id="deleteModal{{ contact.id }}" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel{{ contact.id }}" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteModalLabel{{ contact.id }}">Confirm Delete</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to delete the contact "{{ contact.name }}"?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                <form method="post" action="{% url 'backend:delete_contact' pk=contact.id %}">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+
+{% endfor %}
+
+{% endblock %}

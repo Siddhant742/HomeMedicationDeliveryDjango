@@ -1,0 +1,237 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Order List</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .container {
+            margin-top: 50px;
+        }
+        .table img {
+            max-width: 100px;
+            height: auto;
+        }
+        .messages {
+            margin-top: 20px;
+        }
+        #map {
+            height: 400px;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2 class="mb-4">User Order List</h2>
+        <table class="table table-bordered table-hover">
+            <thead class="thead-light">
+                <tr>
+                    <th>Order ID</th>
+                    <th>Prescription ID</th>
+                    <th>Prescription Image</th>
+                    <th>Status</th>
+                    <th>Delivery Address</th>
+                    <th>Created At</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for order in orders %}
+                <tr>
+                    <td>{{ order.id }}</td>
+                    <td>{{ order.prescription.id }}</td>
+                    <td>
+                        {% if order.prescription.prescription_image %}
+                            <img src="{{ order.prescription.prescription_image.url }}" alt="Prescription Image">
+                        {% else %}
+                            No Image
+                        {% endif %}
+                    </td>
+                    <td>{{ order.status }}</td>
+                    <td>
+                        <a href="#" class="delivery-address" data-lat="{{ order.latitude }}" data-lon="{{ order.longitude }}">
+                            {{ order.delivery_address }}
+                        </a>
+                    </td>
+                    <td>{{ order.created_at }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% if messages %}
+            <div class="messages">
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }} mt-3">{{ message }}</div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+
+    <!-- Modal for displaying map -->
+    <div class="modal fade" id="mapModal" tabindex="-1" aria-labelledby="mapModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="mapModalLabel">Delivery Location</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div id="map"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+<script>
+    $(document).ready(function() {
+        var map;  // Declare the map variable outside the event handler
+
+        $('.delivery-address').on('click', function(e) {
+            e.preventDefault();
+            var lat = $(this).data('lat');
+            var lon = $(this).data('lon');
+            var mapModal = $('#mapModal');
+            mapModal.modal('show');
+
+            mapModal.on('shown.bs.modal', function() {
+                if (map) {
+                    map.remove();  // Remove the existing map instance
+                }
+                map = L.map('map').setView([lat, lon], 13);
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                }).addTo(map);
+                L.marker([lat, lon]).addTo(map)
+                    .bindPopup('Delivery Location')
+                    .openPopup();
+            });
+
+            mapModal.on('hidden.bs.modal', function() {
+                if (map) {
+                    map.remove();  // Remove the map instance when the modal is hidden
+                }
+                $('#map').html('');  // Reset the map container's inner HTML
+            });
+        });
+    });
+</script>
+</body>
+</html>
+
+
+
+<!-- {% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Orders</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .container {
+            margin-top: 50px;
+        }
+        .table img {
+            max-width: 100px;
+            height: auto;
+            cursor: pointer;
+        }
+        .messages {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2 class="mb-4">View Orders</h2>
+        <table class="table table-bordered table-hover">
+            <thead class="thead-light">
+                <tr>
+                    <th>Order ID</th>
+                    <th>User</th>
+                    <th>Prescription ID</th>
+                    <th>Prescription Image</th>
+                    <th>Status</th>
+                    <th>Delivery Address</th>
+                    <th>Created At</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for order in orders %}
+                <tr>
+                    <td>{{ order.id }}</td>
+                    <td>{{ order.user.username }}</td>
+                    <td>{{ order.prescription.id }}</td>
+                    <td>
+                        {% if order.prescription.prescription_image %}
+                            <img src="{{ order.prescription.prescription_image.url }}" alt="Prescription Image" data-toggle="modal" data-target="#imageModal" data-image="{{ order.prescription.prescription_image.url }}">
+                        {% else %}
+                            No Image
+                        {% endif %}
+                    </td>
+                    <td>{{ order.status }}</td>
+                    <td>{{ order.delivery_address }}</td>
+                    <td>{{ order.created_at }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% if messages %}
+            <div class="messages">
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }} mt-3">{{ message }}</div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+
+    <!-- Modal for full-screen image -->
+    <div class="modal fade" id="imageModal" tabindex="-1" aria-labelledby="imageModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="imageModalLabel">Prescription Image</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body text-center">
+                    <img id="modalImage" src="" alt="Prescription Image" class="img-fluid">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        $('#imageModal').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget);
+            var imageUrl = button.data('image');
+            var modal = $(this);
+            modal.find('#modalImage').attr('src', imageUrl);
+        });
+    </script>
+</body>
+</html> -->

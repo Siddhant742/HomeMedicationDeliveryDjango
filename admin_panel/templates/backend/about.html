@@ -1,0 +1,140 @@
+{% extends 'backend/base.html' %}
+{% load static %}
+{% block title %} 
+{% if instance %}Edit About Us{% else %}Add About Us{% endif %}
+{% endblock %}
+{% block body %}
+<title>{% if instance %}Edit About Us{% else %}Add About Us{% endif %}</title>
+
+<!-- ============================================================== -->
+<!-- Start Page Content here -->
+<!-- ============================================================== -->
+
+<div class="content-page">
+    <div class="content">
+
+        <!-- Start Content-->
+        <div class="container-fluid">
+
+            <!-- start page title -->
+            <div class="row">
+                <div class="col-12">
+                    <div class="page-title-box">
+                        <h4 class="page-title">{% if instance %}Edit{% else %}Add{% endif %} Organization Details</h4>
+                    </div>
+                </div>
+            </div>
+            <!-- end page title -->
+
+            <form method="post" enctype="multipart/form-data" action="{% url 'backend:aboutUs' %}">
+                {% csrf_token %}
+                {% if messages %}
+                    {% for msg in messages %}
+                        <div class="alert alert-{{ msg.tags }} alert-dismissible text-bg-{{ msg.tags }} border-0 fade show" role="alert">
+                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="Close"></button>
+                            <strong>{{ msg.tags|title }}: </strong>{{ msg.message }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="row">
+                                    <!-- Left Column -->
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="title" class="form-label">Title</label>
+                                            {{ form.title }}
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="address" class="form-label">Address</label>
+                                            {{ form.address }}
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="email" class="form-label">Email</label>
+                                            {{ form.email }}
+                                        </div>
+                                        <!-- <div class="mb-3">
+                                            <label for="website" class="form-label">Website</label>
+                                            {{ form.website }}
+                                        </div> -->
+                                        <!-- <div class="mb-3">
+                                            <label for="description" class="form-label">Description</label>
+                                            {{ form.description }}
+                                        </div> -->
+                                        <div class="mb-3">
+                                            <label for="contactNo" class="form-label">Contact Number</label>
+                                            {{ form.contactNo }}
+                                        </div>
+
+                                        <div class="mb-3">
+                                            <label for="facebook_url" class="form-label">Facebook URL</label>
+                                            {{ form.facebook_url }}
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="twitter_url" class="form-label">Twitter URL</label>
+                                            {{ form.twitter_url }}
+                                        </div>
+                                        <!-- <div class="mb-3">
+                                            <label for="presedent" class="form-label">President</label>
+                                            {{ form.presedent }}
+                                        </div> -->
+                                        <!-- <div class="mb-3">
+                                            <label for="editor" class="form-label">Editor</label>
+                                            {{ form.editor }}
+                                        </div> -->
+                                    </div>
+            
+                                    <!-- Right Column -->
+                                    <div class="col-md-6">
+                                       
+                                        <div class="mb-3">
+                                            <label for="logo" class="form-label">Logo</label>
+                                            {{ form.logo }}
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="instagram_url" class="form-label">Instagram URL</label>
+                                            {{ form.instagram_url }}
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="vimeo_url" class="form-label">Vimeo URL</label>
+                                            {{ form.vimeo_url }}
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="behance_url" class="form-label">Behance URL</label>
+                                            {{ form.behance_url }}
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="youtube_url" class="form-label">YouTube URL</label>
+                                            {{ form.youtube_url }}
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="tiktok_url" class="form-label">TikTok URL</label>
+                                            {{ form.tiktok_url }}
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="location_url" class="form-label">Location URL</label>
+                                            {{ form.location_url }}
+                                        </div>
+                                    </div>
+                                </div>
+            
+                                <div class="mt-3">
+                                    <button type="submit" class="btn btn-info waves-effect waves-light">
+                                        {% if instance %}Update{% else %}Add{% endif %}
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+            
+
+        </div> <!-- container -->
+
+    </div> <!-- content -->
+
+{% endblock %}
