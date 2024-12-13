@@ -35,6 +35,94 @@
                     <th>Status</th>
                     <th>Delivery Address</th>
                     <th>Created At</th>
+                    <th>Medicines</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for order in orders %}
+                <tr>
+                    <td>{{ order.id }}</td>
+                    <td>{{ order.prescription.id }}</td>
+                    <td>
+                        {% if order.prescription.prescription_image %}
+                            <img src="{{ order.prescription.prescription_image.url }}" alt="Prescription Image">
+                        {% else %}
+                            No Image
+                        {% endif %}
+                    </td>
+                    <td>{{ order.status }}</td>
+                    <td>{{ order.delivery_address }}</td>
+                    <td>{{ order.created_at }}</td>
+                    <td>{{ order.medicines }}</td>
+                        <!-- <ul>
+                            {% for medicine in order.medicines %}
+                                <li>{{ medicine }}</li>
+                            {% endfor %}
+                        </ul> -->
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% if messages %}
+            <div class="messages">
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }} mt-3">{{ message }}</div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+<!-- {% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Order List</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .container {
+            margin-top: 50px;
+        }
+        .table img {
+            max-width: 100px;
+            height: auto;
+        }
+        .messages {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2 class="mb-4">User Order List</h2>
+        <table class="table table-bordered table-hover">
+            <thead class="thead-light">
+                <tr>
+                    <th>Order ID</th>
+                    <th>Prescription ID</th>
+                    <th>Prescription Image</th>
+                    <th>Status</th>
+                    <th>Delivery Address</th>
+                    <th>Created At</th>
                 </tr>
             </thead>
             <tbody>
@@ -138,4 +226,4 @@
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
-</html>
+</html> -->

@@ -39,6 +39,7 @@
                     <th>Prescription Image</th>
                     <th>Status</th>
                     <th>Delivery Address</th>
+                    <th>Medicines</th>
                     <th>Created At</th>
                 </tr>
             </thead>
@@ -60,6 +61,7 @@
                             {{ order.delivery_address }}
                         </a>
                     </td>
+                    <td>{{ order.medicines }}</td>
                     <td>{{ order.created_at }}</td>
                 </tr>
                 {% endfor %}
